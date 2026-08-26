@@ -1,4 +1,7 @@
 # Swarm Foraging in ARGoS
+<p align="center">
+  <img src="assets/diagrams/Swarm_footBot.png" alt="Artificial bee colony inspired swarm foraging with ARGoS foot-bots" width="100%">
+</p>
 
 
 <p align="center">
