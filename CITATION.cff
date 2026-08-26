@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the associated research work."
+title: "Swarm Foraging in ARGoS"
+type: software
+authors:
+  - family-names: Yamani
+    given-names: Hoda
+    orcid: "https://orcid.org/0009-0007-0484-6862"
+repository-code: "https://github.com/h-yamani/Swarm-Foraging-In-Argos"
+url: "https://github.com/h-yamani/Swarm-Foraging-In-Argos"
+abstract: "ARGoS foot-bot simulation of artificial-bee-colony-inspired, energy-aware cooperative swarm foraging."
+keywords:
+  - swarm robotics
+  - artificial bee colony
+  - collective foraging
+  - foot-bot
+  - ARGoS
+  - multi-robot systems
+date-released: 2013-01-01
+preferred-citation:
+  type: conference-paper
+  title: "Simulation of an Adaptive Honey-Bee Colony Foraging Algorithm in Swarm Robotics for Energy-Consumption Optimisation"
+  authors:
+    - family-names: Yamani
+      given-names: Hoda
+    - family-names: Ebrahimpour-Komleh
+      given-names: Hossein
+  year: 2013
+  conference:
+    name: "11th National Conference on Intelligent Systems"
+  url: "https://civilica.com/doc/214704/"
+  notes: "Persian-language conference paper; Civilica document ICS11_122."
+

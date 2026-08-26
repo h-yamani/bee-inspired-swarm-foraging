@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="520" viewBox="0 0 1400 520" role="img" aria-labelledby="title desc">
+  <title id="title">Swarm Foraging in ARGoS</title>
+  <desc id="desc">A foot-bot swarm searches for food using artificial bee colony inspired local coordination.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#08142f"/><stop offset="1" stop-color="#142c53"/></linearGradient>
+    <linearGradient id="bot" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#44d6c5"/><stop offset="1" stop-color="#0f8f91"/></linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="13" flood-color="#020617" flood-opacity=".5"/></filter>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#78a7d1" stroke-opacity=".08"/></pattern>
+  </defs>
+  <rect width="1400" height="520" rx="28" fill="url(#bg)"/>
+  <rect width="1400" height="520" rx="28" fill="url(#grid)"/>
+  <g opacity=".18" fill="none" stroke="#fbbf24" stroke-width="3">
+    <path d="M110 90l34-20 34 20v40l-34 20-34-20zM178 90l34-20 34 20v40l-34 20-34-20zM1240 362l34-20 34 20v40l-34 20-34-20zM1172 362l34-20 34 20v40l-34 20-34-20z"/>
+  </g>
+  <g transform="translate(82 103)">
+    <rect width="720" height="314" rx="24" fill="#0d1f3e" fill-opacity=".72" stroke="#2d5479"/>
+    <text x="42" y="70" fill="#f8fafc" font-family="DejaVu Sans, sans-serif" font-size="48" font-weight="700">Swarm Foraging in ARGoS</text>
+    <text x="42" y="119" fill="#a9c5df" font-family="DejaVu Sans, sans-serif" font-size="24">Artificial Bee Colony–inspired collective intelligence</text>
+    <g transform="translate(42 165)" font-family="DejaVu Sans, sans-serif" font-size="18" font-weight="600">
+      <rect width="142" height="46" rx="23" fill="#f59e0b"/><text x="71" y="30" text-anchor="middle" fill="#172033">LOCAL SEARCH</text>
+      <rect x="158" width="150" height="46" rx="23" fill="#14b8a6"/><text x="233" y="30" text-anchor="middle" fill="#062b2b">RECRUITMENT</text>
+      <rect x="324" width="162" height="46" rx="23" fill="#60a5fa"/><text x="405" y="30" text-anchor="middle" fill="#102445">ENERGY AWARE</text>
+    </g>
+    <text x="42" y="273" fill="#cbd5e1" font-family="DejaVu Sans, sans-serif" font-size="19">Master’s research software · Hoda Yamani · University of Kashan</text>
+  </g>
+  <g transform="translate(1018 258)">
+    <ellipse cx="0" cy="76" rx="190" ry="50" fill="#020617" opacity=".4"/>
+    <ellipse cx="0" cy="32" rx="145" ry="86" fill="#102b4c" stroke="#78d8d1" stroke-width="5"/>
+    <ellipse cx="0" cy="8" rx="132" ry="72" fill="url(#bot)" stroke="#d9fffa" stroke-width="4"/>
+    <ellipse cx="0" cy="-15" rx="91" ry="48" fill="#17335b" stroke="#a7f3d0" stroke-width="4"/>
+    <circle cx="0" cy="-15" r="26" fill="#f59e0b"/><circle cx="0" cy="-15" r="11" fill="#fff7d6"/>
+    <path d="M-149 18l-32 18v76l40 20 14-19v-77zM149 18l32 18v76l-40 20-14-19v-77z" fill="#0b1529" stroke="#7dd3fc" stroke-width="4"/>
+    <g fill="#fbbf24"><circle cx="-98" cy="-48" r="7"/><circle cx="-48" cy="-72" r="7"/><circle cx="48" cy="-72" r="7"/><circle cx="98" cy="-48" r="7"/></g>
+  </g>
+  <g stroke="#5eead4" stroke-width="3" stroke-dasharray="8 10" opacity=".8">
+    <path d="M890 172c-67-65-121-58-168-26"/><path d="M1131 144c80-62 142-39 190 12"/><path d="M1240 321c49 22 77 58 91 104"/>
+  </g>
+  <g font-family="DejaVu Sans, sans-serif" font-weight="700" font-size="15" text-anchor="middle">
+    <g transform="translate(865 141)"><circle r="29" fill="#f59e0b"/><text y="5" fill="#1f2937">SCOUT</text></g>
+    <g transform="translate(1325 161)"><circle r="31" fill="#8b5cf6"/><text y="5" fill="white">HIVE</text></g>
+    <g transform="translate(1340 450)"><circle r="35" fill="#3b82f6"/><text y="5" fill="white">FORAGER</text></g>
+  </g>
+</svg>

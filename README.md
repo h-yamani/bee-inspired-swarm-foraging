@@ -1,175 +1,216 @@
 # Swarm Foraging in ARGoS
 
 <p align="center">
-  <b>Artificial Bee Colony–inspired cooperative foraging with foot-bot robots</b>
+  <img src="assets/diagrams/project-hero.svg" alt="Artificial bee colony inspired swarm foraging with ARGoS foot-bots" width="100%">
 </p>
 
 <p align="center">
-  <a href="https://www.argos-sim.info/"><img src="https://img.shields.io/badge/Simulator-ARGoS_3-2f80ed" alt="ARGoS 3"></a>
+  <strong>Artificial Bee Colony–inspired cooperative foraging, local recruitment, and energy-aware task allocation with simulated foot-bot robots.</strong>
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Simulator-ARGoS%202%20(legacy)-2563EB" alt="ARGoS 2 legacy">
+  <img src="https://img.shields.io/badge/Robot-foot--bot-F59E0B" alt="foot-bot">
   <img src="https://img.shields.io/badge/Language-C%2B%2B-00599C" alt="C++">
   <img src="https://img.shields.io/badge/Build-CMake-064F8C" alt="CMake">
-  <img src="https://img.shields.io/badge/Robots-foot--bot-f39c12" alt="foot-bot">
-  <img src="https://img.shields.io/badge/Domain-Swarm_Robotics-6f42c1" alt="Swarm Robotics">
+  <img src="https://img.shields.io/badge/Domain-Swarm%20Robotics-8B5CF6" alt="Swarm robotics">
 </p>
 
 ## Overview
 
-This repository contains an **ARGoS simulation of cooperative foraging in a swarm robotic system**, inspired by the **Artificial Bee Colony (ABC) algorithm**. A group of autonomous foot-bot robots searches the arena for food, collects discovered items, and transports them to a shared nest.
+This repository preserves the implementation developed for the master’s research project **“Simulation of Foraging in Swarm Robotics Based on the Artificial Bee Colony Algorithm.”** It models a decentralised swarm of foot-bot robots that searches an unknown arena, recruits nearby robots to promising food sources, transports food to a shared nest, and adapts the number of active robots to reduce unnecessary energy consumption.
 
-The project demonstrates how simple local behaviours can produce coordinated swarm-level performance without a central controller. It is intended as a research and educational implementation for studying swarm intelligence, distributed decision-making, and bio-inspired robotics.
+The work combines **swarm robotics**, **Artificial Bee Colony principles**, **local range-and-bearing communication**, **finite-state robot control**, and **energy-aware task allocation**. The associated Persian conference paper reports lower energy waste and better efficiency than an adaptive foraging baseline, together with scalability as the arena and swarm sizes increase.
 
-## Foraging scenario
+> [!IMPORTANT]
+> This is an archival **ARGoS 2** research codebase. Its source includes `argos2/...` headers and uses the ARGoS 2 XML, Qt4, and plug-in interfaces. It is not directly compatible with ARGoS 3 without a deliberate port.
 
-Each robot repeatedly moves through a local sense–decide–act cycle:
+## Research Contribution
 
-```mermaid
-flowchart TD
-    A["Leave the nest"] --> B["Explore the arena"]
-    B --> C{"Food detected?"}
-    C -- No --> B
-    C -- Yes --> D["Collect food"]
-    D --> E["Return to the nest"]
-    E --> F["Deposit food"]
-    F --> A
-```
+The project translates honey-bee colony behaviour into distributed robot roles:
 
-The overall swarm behaviour follows the core ideas of ABC:
-
-| ABC concept | Swarm-foraging interpretation |
+| Biological idea | Robotic interpretation |
 |---|---|
-| Food source | A food item or promising region in the arena |
-| Employed bee | A robot exploiting a discovered food source |
-| Onlooker bee | A robot selecting useful shared information |
-| Scout bee | A robot exploring for new food sources |
-| Nectar quality | The value or usefulness of a discovered source |
-| Hive | The shared nest and food-deposit area |
+| Scout bee | A foot-bot explores unknown regions and detects food |
+| Recruitment | A successful scout shares source location and quality locally |
+| Forager / employed bee | A recruited foot-bot travels to and exploits a food source |
+| Hive / observer | A coordinating role evaluates messages and allocates available foragers |
+| Nectar quality | Food quantity or value used to control recruitment intensity |
+| Resting bee | An inactive robot avoids unnecessary motion and energy use |
 
-## System architecture
+The implementation does not rely on a global map shared by every robot. Coordination emerges from local sensing, local communication, role-specific state machines, and interaction with the arena.
 
-```mermaid
-flowchart LR
-    S["ARGoS sensors"] --> C["Foot-bot controller"]
-    C --> A["Motion and LEDs"]
-    C <--> I["Local swarm interaction"]
-    A --> W["Arena and food"]
-    W --> S
+## System at a Glance
+
+<p align="center">
+  <img src="assets/diagrams/system-architecture.svg" alt="Swarm foraging system architecture" width="96%">
+</p>
+
+The controller uses the foot-bot’s proximity, light, motor-ground, and range-and-bearing interfaces. ARGoS loop functions create and manage food sources, detect pickup and delivery, track robot activity, and write experiment metrics including collected food and energy-related measures.
+
+## Robot Behaviour
+
+<p align="center">
+  <img src="assets/diagrams/foraging-state-machine.svg" alt="Detailed foot-bot foraging state machine" width="96%">
+</p>
+
+The source contains two layers of behaviour state:
+
+- **High-level mode:** resting, exploring, returning to the nest, and turning.
+- **Operational mode:** leaving home, random walk, scanning, moving to food, collecting food, returning home, depositing food, homing after an unsuccessful search, and collision avoidance.
+
+This diagram is a modern, English reconstruction of the original Persian thesis figures, cross-checked against the `SStateData::EState` and `SStateData::EnState` enumerations and the controller transitions.
+
+## Local Recruitment and Collective Foraging
+
+<p align="center">
+  <img src="assets/diagrams/recruitment-cycle.svg" alt="Local recruitment and collective foraging cycle" width="92%">
+</p>
+
+Range-and-bearing messages encode food information and robot availability. The source distinguishes scout, hive, and forager roles through controller configuration and message values. Successful discoveries can therefore activate an appropriate subset of resting robots rather than keeping the entire swarm moving continuously.
+
+## The ARGoS foot-bot
+
+<p align="center">
+  <img src="assets/diagrams/footbot-capabilities.svg" alt="Foot-bot capabilities used in the project" width="86%">
+</p>
+
+The foot-bot is a modular differential-drive robot developed in the Swarmanoid project. In this simulation, the controller uses:
+
+- wheel actuation for navigation;
+- proximity sensing for obstacle avoidance;
+- motor-ground sensing to distinguish nest, food, and arena regions;
+- light sensing for navigation cues;
+- LEDs for visual state feedback; and
+- range-and-bearing sensing/actuation for localised robot-to-robot communication.
+
+The schematic documents interfaces used by this repository; it is not a mechanical drawing of the physical robot.
+
+## Repository Structure
+
+```text
+.
+├── Color-Phase/                   # Colour/quantity-based controller variant
+│   ├── footbot_foraging/          # Foot-bot controller plug-in
+│   ├── foraging_loop_functions/   # Arena, food, metrics, and visualisation
+│   └── foraging_HB_8_2.xml        # Example honey-bee experiment
+├── NN-Phase/                      # Neural quantity-estimation variant
+│   ├── footbot_foraging/
+│   └── foraging_loop_functions/
+├── xml/
+│   ├── 3/xml/                     # Experiment family 3
+│   ├── 4/xml/                     # Experiment family 4
+│   └── foraging_HB.xml
+├── assets/diagrams/               # Modern vector documentation
+├── archive/thesis-figures/        # Original Persian figures/screenshots
+├── docs/                          # Research, experiment, and migration notes
+├── CITATION.cff
+└── README.md
 ```
 
-The implementation combines:
+Editor backup files ending in `~` were removed from the professional package; the substantive C++, header, CMake, and XML files are preserved.
 
-- autonomous foot-bot control;
-- exploration and obstacle avoidance;
-- food detection, collection, and delivery;
-- local robot-to-robot interaction;
-- nest navigation; and
-- experiment configuration and visualisation in ARGoS.
+## Controller Variants
 
-## Requirements
+| Variant | Main distinction | Evidence in source |
+|---|---|---|
+| `Color-Phase` | Food quantity/quality categories drive recruitment decisions | `food_color`, food-source messages, employer allocation |
+| `NN-Phase` | Adds neural estimation of food quantity/value | input/hidden/output arrays, `EstimateQuantity()`, backpropagation |
 
-- Linux (recommended)
-- [ARGoS 3](https://www.argos-sim.info/)
-- C++ compiler with C++11 support
-- CMake
-- Make
-- Qt/OpenGL support for the ARGoS visualiser
+## Experiment Configurations
 
-Confirm that ARGoS is available before building:
+The repository includes several ARGoS XML families:
 
-```bash
-argos3 --version
+- `foraging_HB_*`: honey-bee-inspired role allocation;
+- `foraging_adaptive_*`: adaptive-foraging comparison configurations;
+- `foraging_HB3.xml` and `foraging_HB_8_2.xml`: additional variants;
+- `diffusion_*`, `flocking.xml`, `synchronization.xml`, and `evolution*.xml`: supporting or inherited ARGoS experiments.
+
+Suffixes such as `_4`, `_8`, and `_16` identify experiment variants associated with different forager/swarm settings. Exact entity counts should be read from each XML rather than inferred solely from the filename because scout, hive, and forager quantities are configured separately.
+
+See [Experiment Guide](docs/EXPERIMENTS.md) for a parameter map.
+
+## Metrics Produced by the Simulation
+
+The loop functions write a tab-separated output with:
+
+```text
+clock  walking  resting  collected_food  energy  consume_energy  energy_per_food
 ```
 
-## Build
+These fields support comparisons of collection performance, active versus resting allocation, cumulative energy behaviour, and energy spent per collected food item. The repository does not contain the original raw result files, so this restoration does **not** fabricate numerical result charts.
 
-Clone the repository and compile it from the project root:
+## Building and Reproducing
 
-```bash
-git clone https://github.com/h-yamani/Swarm-Foraging-In-Argos.git
-cd Swarm-Foraging-In-Argos
-mkdir -p build
-cd build
-cmake ..
-make -j"$(nproc)"
-cd ..
-```
+The archived code targets ARGoS 2 and Qt4-era interfaces. A historically compatible environment is required to compile it as written. The included subdirectory `CMakeLists.txt` files build controller and loop-function modules, but the original top-level build file and full environment specification were not preserved.
 
-If CMake cannot locate ARGoS, provide the directory containing `ARGoSConfig.cmake`:
+For that reason, this repository currently serves as:
 
-```bash
-cmake -DCMAKE_PREFIX_PATH=/path/to/argos3 ..
-```
+1. a documented research-software archive;
+2. a source reference for the bee-inspired algorithm; and
+3. a starting point for a controlled ARGoS 3 port.
 
-## Run a simulation
+Do not run the earlier generic `argos3 -c ...` instruction against these XML files—the controller API and configuration schema differ. See [Legacy Build and Migration Notes](docs/LEGACY_BUILD.md).
 
-First, locate the available ARGoS experiment configuration:
+## Research Record
 
-```bash
-find . -type f -name "*.argos"
-```
+### Master’s thesis
 
-Then run the required configuration from the repository root:
+**Persian title:** شبیه‌سازی جستجوی غذا در رباتیک ازدحامی بر اساس الگوریتم کلونی زنبورهای مصنوعی  
+**English title:** *Simulation of Foraging in Swarm Robotics Based on the Artificial Bee Colony Algorithm*  
+**Author:** Hoda Yamani  
+**University:** University of Kashan, Faculty of Electrical and Computer Engineering  
+**Year:** 1391 / 2012–2013  
+**Supervisor:** Hossein Ebrahimpour-Komleh  
+**Advisors indexed by Elmnet:** Ahmad Yoosofan and Morteza Babamir  
 
-```bash
-argos3 -c path/to/experiment.argos
-```
+[Persian thesis catalogue record](https://lib.kashanu.ac.ir/Inventory/7/4791.htm) · [Elmnet author and thesis record](https://elmnet.ir/author/%D9%87%D8%AF%DB%8C-%DB%8C%D9%85%D8%A7%D9%86%DB%8C)
 
-Running from the repository root is recommended because experiment files may use relative paths to controller libraries and other resources.
+### Conference paper
 
-## What to observe
+**Persian title:** شبیه‌سازی الگوریتم تطبیقی جستجوی غذای کلونی زنبورهای عسل در رباتیک ازدحامی به منظور بهینه‌سازی مصرف انرژی  
+**Authors:** Hoda Yamani and Hossein Ebrahimpour-Komleh  
+**Venue:** 11th National Conference on Intelligent Systems  
+**Year:** 1391  
+**Document ID:** ICS11_122
 
-During a simulation, observe how:
-
-1. robots leave the nest and distribute themselves through the arena;
-2. individual robots search without global knowledge of the environment;
-3. robots respond to food discoveries using ABC-inspired roles;
-4. collected food is returned to the common nest; and
-5. repeated local decisions create an organised swarm-level foraging pattern.
-
-Useful experimental measures include the number of collected items, collection rate, search time, travelled distance, collision frequency, and performance as swarm size changes.
-
-## Research background
-
-This repository originated from the following research project:
-
-> **Simulation of Foraging in a Swarm Robotic System Based on the Artificial Bee Colony Algorithm**  
-> Hoda Yamani, 2013  
-> Supervisor: Dr Hossein Ebrahimpour-Komleh  
-> Advisor: Ahmad Yoosofan
-
-The work investigates how the division of labour and search behaviour observed in honey-bee colonies can be adapted to decentralised robotic foraging.
-
-## Limitations
-
-This is a legacy academic research prototype. Modern ARGoS, compiler, or operating-system versions may require small compatibility changes. Exact behaviour and performance also depend on the selected experiment configuration and its parameters.
+[Civilica record and abstract](https://civilica.com/doc/214704/)
 
 ## Citation
 
-If this repository supports your research, please cite the project as:
+If you use the repository, please cite the associated conference work:
 
 ```bibtex
-@misc{yamani2013swarmforaging,
-  author       = {Hoda Yamani},
-  title        = {Simulation of Foraging in a Swarm Robotic System Based on the Artificial Bee Colony Algorithm},
-  year         = {2013},
-  howpublished = {Software repository},
-  url          = {https://github.com/h-yamani/Swarm-Foraging-In-Argos}
+@inproceedings{yamani1391adaptive_swarm_foraging,
+  author    = {Hoda Yamani and Hossein Ebrahimpour-Komleh},
+  title     = {Simulation of an Adaptive Honey-Bee Colony Foraging Algorithm
+               in Swarm Robotics for Energy-Consumption Optimisation},
+  booktitle = {11th National Conference on Intelligent Systems},
+  year      = {1391},
+  language  = {Persian},
+  note      = {Civilica document ICS11_122},
+  url       = {https://civilica.com/doc/214704/}
 }
 ```
+
+Repository citation metadata is also available in [`CITATION.cff`](CITATION.cff).
+
+## References
+
+- [ARGoS official website](https://www.argos-sim.info/)
+- [ARGoS simulator paper](https://doi.org/10.1007/s11721-012-0072-5)
+- [Official ARGoS foot-bot entity documentation](https://www.argos-sim.info/api/a01420.php)
+- [Associated Persian conference paper](https://civilica.com/doc/214704/)
+- [Master’s thesis catalogue record](https://lib.kashanu.ac.ir/Inventory/7/4791.htm)
 
 ## Author
 
 **Hoda Yamani**  
-Machine Learning, Reinforcement Learning, and Robotics Researcher
+Machine Learning · Reinforcement Learning · Robotics · Intelligent Systems
 
-- [GitHub](https://github.com/h-yamani)
-- [ORCID](https://orcid.org/0009-0007-0484-6862)
-
-## Acknowledgements
-
-This project uses the [ARGoS multi-robot simulator](https://www.argos-sim.info/) and the foot-bot robotic platform. The behavioural design is inspired by the Artificial Bee Colony optimisation algorithm and collective foraging in social insects.
+[GitHub](https://github.com/h-yamani) · [ORCID](https://orcid.org/0009-0007-0484-6862)
 
 ---
 
-<p align="center">
-  Bio-inspired intelligence through local interaction and collective behaviour.
-</p>
+<p align="center"><em>From local sensing and recruitment to energy-aware collective intelligence.</em></p>
+
