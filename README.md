@@ -1,8 +1,5 @@
 # Swarm Foraging in ARGoS
 
-<p align="center">
-  <img src="assets/diagrams/project-hero.svg" alt="Artificial bee colony inspired swarm foraging with ARGoS foot-bots" width="100%">
-</p>
 
 <p align="center">
   <strong>Artificial Bee Colony–inspired cooperative foraging, local recruitment, and energy-aware task allocation with simulated foot-bot robots.</strong>
