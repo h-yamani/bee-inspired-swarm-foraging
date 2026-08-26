@@ -69,7 +69,7 @@ Range-and-bearing messages encode food information and robot availability. The s
 ## The ARGoS foot-bot
 
 <p align="center">
-  <img src="assets/diagrams/footbot-capabilities.svg" alt="Foot-bot capabilities used in the project" width="86%">
+  <img src="assets/diagrams/footbot-capabilities.jpg" alt="Foot-bot capabilities used in the project" width="86%">
 </p>
 
 The foot-bot is a modular differential-drive robot developed in the Swarmanoid project. In this simulation, the controller uses:
